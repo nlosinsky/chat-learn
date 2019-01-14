@@ -6,8 +6,11 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "assert": "^1.4.1",
+    "async": "^2.6.1",
     "bootstrap": "^4.2.1",
     "cookie-parser": "~1.4.3",
+    "crypto": "^1.0.1",
     "debug": "~2.6.9",
     "ejs": "~2.5.7",
     "ejs-locals": "^1.0.2",
@@ -15,6 +18,8 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "jquery": "^3.3.1",
+    "mongodb": "^3.1.10",
+    "mongoose": "^5.4.3",
     "morgan": "~1.9.0",
     "nconf": "^0.10.0",
     "winston": "^3.1.0"
