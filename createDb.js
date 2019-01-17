@@ -1,4 +1,4 @@
-const mongoose = require('./libs/mongoose');
+const mongoose = require('libs/mongoose');
 const async = require('async');
 
 async.series([
@@ -21,7 +21,7 @@ function dropDatabase(callback) {
 }
 
 function requireModels(cb) {
-    require('./models/user');
+    require('models');
 
     async.each(Object.keys(mongoose.models), function(modelName, callback) {
         mongoose.models[modelName].ensureIndexes(callback);

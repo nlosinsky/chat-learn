@@ -1,9 +1,11 @@
 var express = require('express');
 var router = express.Router();
+var checkAuth = require('middleware/checkAuth');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index');
-});
+router.use(require('./frontpage'));
+router.use(require('./login'));
+router.use(require('./logout'));
+router.use(checkAuth, require('./chat'));
+router.use(require('./users'));
 
 module.exports = router;

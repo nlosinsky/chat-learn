@@ -1,5 +1,7 @@
 var crypto = require('crypto');
-var mongoose = require('../libs/mongoose');
+var async = require('async');
+var util = require('util');
+var mongoose = require('libs/mongoose');
 var Schema = mongoose.Schema;
 
 var schema = new Schema({
@@ -39,4 +41,43 @@ schema.methods.checkPassword = function(password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
-exports.User = mongoose.model('User', schema);
+schema.statics.authorize = function(username, password, cb) {
+  var User = this;
+
+  async.waterfall([
+        function(callback) {
+          User.findOne({ username: username }, callback);
+        },
+        function(user, callback) {
+          if (user) {
+            if (user.checkPassword(password)) {
+              callback(null, user);
+            } else {
+              cb(new AuthError("Пароль не верен"));
+            }
+          } else {
+            var user = new User({ username: username, password: password });
+            user.save(function(err) {
+              if (err) return cb(err);
+              callback(null, user);
+            })
+          }
+        }
+      ], cb);
+};
+
+module.exports.User = mongoose.model('User', schema);
+
+// ошибки для выдачи посетителю
+function AuthError(message) {
+  Error.apply(this, arguments);
+  Error.captureStackTrace(this, AuthError);
+
+  this.message = message;
+}
+
+util.inherits(AuthError, Error);
+
+AuthError.prototype.name = 'AuthError';
+
+module.exports.AuthError = AuthError;

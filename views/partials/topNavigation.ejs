@@ -1,8 +1,27 @@
 <nav class="navbar navbar-default" role="navigation">
   <ul class="nav navbar-nav">
     <li><a href="/">Главная</a></li>
+    <% if (user) { %>
+    <li><a href="/chat">Чат</a></li>
+    <% } %>
   </ul>
   <ul class="nav navbar-nav navbar-right">
+    <% if (user) { %>
+    <li>
+      <a href="#" onclick="logout(event)">Выйти</a>
+      <form hidden name="logout-form" method=POST action=/logout></form>
+    </li>
+    <% } else { %>
     <li><a href="/login">Войти</a></li>
+    <% } %>
   </ul>
 </nav>
+
+<script>
+  function logout(e) {
+    e.preventDefault();
+
+    $(document.forms['logout-form']).submit();
+    console.log(333);
+  }
+</script>
