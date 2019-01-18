@@ -8,6 +8,7 @@ var app = require('app');
 var debug = require('debug')('chat-learn:server');
 var http = require('http');
 var config = require('config');
+var socket = require('socket.io');
 
 /**
  * Get port from environment and store in Express.
@@ -20,6 +21,16 @@ var port = normalizePort(process.env.PORT || config.get('port'));
  */
 
 var server = http.createServer(app);
+var io = socket(server);
+
+io.on('connection', function(socket){
+  console.log('a user connected');
+
+  socket.on('message', function(text, callback) {
+    callback();
+    socket.broadcast.emit('message', text);
+  });
+});
 
 /**
  * Listen on provided port, on all network interfaces.

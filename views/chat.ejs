@@ -4,3 +4,37 @@
 <p class="lead">Здесь будет чат.</p>
 
 <p>Добро пожаловать, <%=user.get('username')%></p>
+
+<script src="/socket.io/socket.io.js"></script>
+
+<div id="room">
+    <ul></ul>
+    <form>
+        <input class="form-control" autocomplete="off" autofocus placeholder="Сообщение...">
+    </form>
+</div>
+
+<script>
+    var socket = io();
+
+    var form = $('#room form');
+    var ul = $('#room ul');
+
+    form.submit(function() {
+        var input = $(this).find('input');
+        var text = input.val();
+        input.val('');
+
+        socket.emit('message', text, function(data) {
+            console.log(1);
+            $('<li>', {text: text}).appendTo(ul);
+        });
+
+        return false;
+    });
+
+    socket.on('message', function(text) {
+        $('<li>', {text: text}).appendTo(ul);
+    });
+
+</script>
