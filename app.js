@@ -4,11 +4,9 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
 var logger = require('morgan');
-var MongoStore = require('connect-mongo')(session);
 
 var HttpError = require('error').HttpError;
 var config = require('config');
-var mongoose = require('libs/mongoose');
 
 var app = express();
 
@@ -27,7 +25,7 @@ app.use(session({
   secret: config.get('session:secret'),
   key: config.get('session:key'),
   cookie: config.get('session:cookie'),
-  store: new MongoStore({mongooseConnection: mongoose.connection})
+  store: require('libs/sessionStore')
 }));
 app.use(require('middleware/sendHttpError'));
 app.use(require('middleware/loadUser'));
